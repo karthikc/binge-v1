@@ -1,0 +1,68 @@
+<nav class="navbar navbar-default" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="<%=root_url%>">Elegant Import</a>
+  </div>
+
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <%@import_classes.each do |class_name|%>
+        <li class='<%="active" if @selected_class_name == class_name.underscore%>'>
+          <a href="<%=upload_url(class_name.underscore)%>"><%=class_name%></a>
+        </li>
+      <%end%>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">Back To Application</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div id="page_content">
+
+  <div class="page-header">
+    <h1><%=@selected_class.name%> <small>Bulk import <%=@selected_class.name.humanize.downcase%> data</small></h1>
+  </div>
+
+  <div class="panel panel-default" id="attributes_panel">
+    <div class="panel-heading">
+      <h4 class="panel-title" data-toggle="collapse" data-target="#attributes_body">
+          Attributes <span id="attributes_status_icon" class="glyphicon glyphicon-chevron-right"></span>
+      </h4>
+    </div>
+    <div class="panel-collapnse collapse" id="attributes_body">
+      <div class="panel-body">
+        <%@selected_class.columns.in_groups_of(4, false).each do |group|%>
+        <div class="row">
+          <%group.each do |column|%>
+          <div class="col-md-3">
+            <strong><%=column.name%></strong>: <%=column.type%>
+          </div>
+          <%end%>
+        </div>
+        <%end%>
+      </div>
+    </div>  
+  </div>
+    
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Upload Data File</h4>
+    </div>
+    <div class="panel-body">
+      <%= form_tag process_file_path, multipart: true, id: "data_upload_form", role: "form" do %>  
+        <div class="form-group has-error">
+          <input type="file" name="datafile">
+          <p class="help-block">Upload model data in CSV format</p>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      <% end %>
+    </div>
+  </div>
+  
+</div>

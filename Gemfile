@@ -12,3 +12,7 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
+
+gem "jquery-rails"
+gem "jquery-ui-rails"
+gem "carrierwave"

@@ -2,13 +2,19 @@
 <html>
 <head>
   <title>ElegantImport</title>
-  <%= stylesheet_link_tag    "elegant_import/application", media: "all" %>
-  <%= javascript_include_tag "elegant_import/application" %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= csrf_meta_tags %>
+
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+  <%= stylesheet_link_tag    "elegant_import/application", media: "all" %>
+
+  <%= javascript_include_tag "elegant_import/application" %>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-<%= yield %>
-
+  <div class="container">
+    <%= yield %>
+  </div>
 </body>
 </html>
