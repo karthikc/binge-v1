@@ -11,9 +11,9 @@
 
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <%@import_classes.each do |class_name|%>
-        <li class='<%="active" if @selected_class_name == class_name.underscore%>'>
-          <a href="<%=upload_url(class_name.underscore)%>"><%=class_name%></a>
+      <% ElegantImport::Model.all.each do |model|%>
+        <li class='<%="active" if @selected_model.class_name == model.class_name%>'>
+          <a href="<%=upload_url(model.parameterized_class_name)%>"><%=model.class_name%></a>
         </li>
       <%end%>
     </ul>
@@ -26,7 +26,7 @@
 <div id="page_content">
 
   <div class="page-header">
-    <h1><%=@selected_class.name%> <small>Bulk import <%=@selected_class.name.humanize.downcase%> data</small></h1>
+    <h1><%=@selected_model.class_name%> <small>Bulk import <%=@selected_model.humanized_name%> data</small></h1>
   </div>
 
   <div class="panel panel-default" id="attributes_panel">
@@ -37,7 +37,7 @@
     </div>
     <div class="panel-collapnse collapse" id="attributes_body">
       <div class="panel-body">
-        <%@selected_class.columns.in_groups_of(4, false).each do |group|%>
+        <%@selected_model.columns.in_groups_of(4, false).each do |group|%>
         <div class="row">
           <%group.each do |column|%>
           <div class="col-md-3">
@@ -55,13 +55,14 @@
       <h4 class="panel-title">Upload Data File</h4>
     </div>
     <div class="panel-body">
-      <%= form_tag process_file_path, multipart: true, id: "data_upload_form", role: "form" do %>  
-        <div class="form-group has-error">
-          <input type="file" name="datafile">
-          <p class="help-block">Upload model data in CSV format</p>
+      <%= form_for @dataset, url: process_file_path, multipart: true, html: {id: "data_upload_form", role: "form"} do |f| %>
+        <%= f.hidden_field :model_class_name%>
+        <div class="form-group <%='has-error' if has_errors?(@dataset, :data_file)%>">
+          <%= f.file_field :data_file%>
+          <%=show_error_message(@dataset, :data_file)%>
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      <% end %>
+        <%=f.submit "Submit", class: "btn btn-default"%>
+      <%end%>  
     </div>
   </div>
   
