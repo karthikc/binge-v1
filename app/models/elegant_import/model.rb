@@ -16,7 +16,7 @@ module ElegantImport
     end
     
     def columns
-      klass.columns
+      klass.columns.reject {|column| ["id", "created_at", "updated_at"].include?(column.name) }
     end
     
     def self.all
