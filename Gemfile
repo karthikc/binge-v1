@@ -16,3 +16,7 @@ gemspec
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "carrierwave"
+
+group :test, :development do
+  gem 'rspec-rails', '~> 2.0'
+end

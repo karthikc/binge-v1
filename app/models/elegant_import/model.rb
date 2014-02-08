@@ -8,7 +8,7 @@ module ElegantImport
     end
     
     def humanized_name
-      class_name.humanize.downcase
+      parameterized_class_name.humanize.downcase
     end
     
     def klass
@@ -18,6 +18,11 @@ module ElegantImport
     def columns
       klass.columns.reject {|column| ["id", "created_at", "updated_at"].include?(column.name) }
     end
+    
+    def ==(other)
+      self.class_name == other.class_name
+    end
+    
     
     def self.all
       ElegantImport.import_classes.collect {|class_name| Model.new(class_name: class_name)}
