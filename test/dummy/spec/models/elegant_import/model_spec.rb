@@ -37,27 +37,42 @@ describe ElegantImport::Model do
     expect(school_columns_names).to eq ["name", "city"]
   end
   
-  it "can fetch all configured classes" do
+  it "should fetch all configured classes" do
     ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
     expect(ElegantImport::Model.all).to eq [model("StudentInvoice"), model("OMRTest")]
   end
+  
+  describe ".first" do
+    context "when there are multiple classes configured" do
+      it "should fetch the first configured class" do
+        ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
+        expect(ElegantImport::Model.first).to eq model("StudentInvoice")
+      end
+    end
 
-  it "can fetch the first configured class" do
-    ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
-    expect(ElegantImport::Model.first).to eq model("StudentInvoice")
-
-    ElegantImport.import_classes = ["OMRTest", "StudentInvoice"]
-    expect(ElegantImport::Model.first).to eq model("OMRTest")
+    context "when there's a single class configured" do
+      it "should fetch the configured class" do
+        ElegantImport.import_classes = ["OMRTest"]
+        expect(ElegantImport::Model.first).to eq model("OMRTest")
+      end
+    end
+    
+    context "when there are no configured classes" do
+      it "should return nothing" do
+        ElegantImport.import_classes = []
+        expect(ElegantImport::Model.first).to be_nil
+      end
+    end
   end
   
   describe ".find" do
-    it "can find a model by its class name" do
+    it "should find a model by its class name" do
       ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
       expect(ElegantImport::Model.find("StudentInvoice")).to eq model("StudentInvoice")
       expect(ElegantImport::Model.find("OMRTest")).to eq model("OMRTest")
     end
 
-    it "can find a model by its parameterized name" do
+    it "should find a model by its parameterized name" do
       ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
       expect(ElegantImport::Model.find("student_invoice")).to eq model("StudentInvoice")
       expect(ElegantImport::Model.find("omr_test")).to eq model("OMRTest")
