@@ -17,6 +17,7 @@ module ElegantImport
       super(attributes)
     end
     
+    validates :model, presence: true
     validates_integrity_of :data_file
     validates :data_file, presence: true, unless: "data_file_integrity_error"
     validate :atleast_one_row, unless: "data_file.blank?"
@@ -36,9 +37,10 @@ module ElegantImport
     end
     
     def header_matches_model_attributes
-      headers = csv.to_a.first
-      all_columns_present = model.columns.all? {|column| headers.include?(column.name)}
-      self.errors.add(:data_file, "header does not match model attributes #{model.columns.collect(&:name)}") unless all_columns_present
+      headers = csv.to_a.first.collect(&:strip)
+      missing_columns = model.columns.reject {|column| headers.include?(column.name)}
+      missing_column_names = missing_columns.collect(&:name).join(", ")
+      self.errors.add(:data_file, "does not have the following columns: #{missing_column_names}") unless missing_columns.empty?
     end
     
   end
