@@ -27,17 +27,20 @@ module ElegantImport
       model.class_name
     end
     
+    private
     def csv
       @csv ||= CSV.parse(data_file.read)
     end
     
-    private
     def atleast_one_row
       self.errors.add(:data_file, "should have atleast one data row") if csv.to_a.size <= 1
     end
     
     def header_matches_model_attributes
-      headers = csv.to_a.first.collect(&:strip)
+      rows = csv.to_a
+      return if rows.empty?
+      
+      headers = rows.first.collect(&:strip)
       missing_columns = model.columns.reject {|column| headers.include?(column.name)}
       missing_column_names = missing_columns.collect(&:name).join(", ")
       self.errors.add(:data_file, "does not have the following columns: #{missing_column_names}") unless missing_columns.empty?
