@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module ElegantImport
+module Gulp
   class MainControllerTest < ActionController::TestCase
     # test "the truth" do
     #   assert true

@@ -1,4 +1,4 @@
-module ElegantImport
+module Gulp
   module ApplicationHelper
 
     def show_error_message(object, field_name)

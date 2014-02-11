@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module ElegantImport
+module Gulp
 
   describe Dataset do
   
@@ -8,6 +8,10 @@ module ElegantImport
     let(:empty_csv) do
       extend ActionDispatch::TestProcess
       fixture_file_upload("empty.csv", "text/text")
+    end
+    let(:schools_csv) do
+      extend ActionDispatch::TestProcess
+      fixture_file_upload("schools.csv", "text/text")
     end
 
     describe "#initialize" do
@@ -61,13 +65,13 @@ module ElegantImport
         end
 
         it "should contain the data file" do
-          dataset = Dataset.new({})
+          dataset = Dataset.new({model: school_model})
           expect(dataset).to have(1).error_on(:data_file)
           expect(dataset.errors_on(:data_file)).to include("Data file can't be blank")
         end
 
         it "should contain the model" do
-          dataset = Dataset.new({})
+          dataset = Dataset.new({data_file: schools_csv})
           expect(dataset).to have(1).error_on(:model)
           expect(dataset.errors_on(:model)).to include("Model can't be blank")
         end
@@ -112,15 +116,16 @@ module ElegantImport
       end
     
       context "with valid data" do
-        let(:schools_csv) do
-          extend ActionDispatch::TestProcess
-          fixture_file_upload("schools.csv", "text/text")
-        end
-
         it "should have no errors when data file has valid rows" do
           dataset = Dataset.new(data_file: schools_csv, model: school_model)
           expect(dataset).to have(:no).errors_on(:data_file)
         end
+      end
+    end
+    
+    describe "#import" do
+      it "should import all valid data into the databse" do
+        dataset = Dataset.new(data_file: schools_csv, model: school_model)
       end
     end
   

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module ElegantImport
+module Gulp
   class MainHelperTest < ActionView::TestCase
   end
 end

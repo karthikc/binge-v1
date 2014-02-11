@@ -1,5 +1,5 @@
 require 'csv'
-module ElegantImport
+module Gulp
 
   class Dataset
     include ActiveModel::Model
@@ -21,7 +21,7 @@ module ElegantImport
     validates_integrity_of :data_file
     validates :data_file, presence: {message: "Data file can't be blank"}, unless: "data_file_integrity_error"
     validate :atleast_one_row, unless: "data_file.blank?"
-    validate :header_matches_model_attributes, unless: "data_file.blank?"
+    validate :header_matches_model_attributes, unless: "data_file.blank? or model.blank?"
     
     def model_class_name
       model.class_name

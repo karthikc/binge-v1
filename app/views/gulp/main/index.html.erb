@@ -6,12 +6,12 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="<%=root_url%>">Elegant Import</a>
+    <a class="navbar-brand" href="<%=root_url%>">Gulp</a>
   </div>
 
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <% ElegantImport::Model.all.each do |model|%>
+      <% Gulp::Model.all.each do |model|%>
         <li class='<%="active" if @selected_model.class_name == model.class_name%>'>
           <a href="<%=upload_url(model.parameterized_class_name)%>"><%=model.class_name%></a>
         </li>

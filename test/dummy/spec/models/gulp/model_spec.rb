@@ -3,16 +3,16 @@ require 'spec_helper'
 class StudentInvoice 
 end
 
-module ElegantImport
+module Gulp
   
   describe Model do
 
     before(:each) do
-      @exisitng_import_classes = ElegantImport.import_classes
+      @exisitng_import_classes = Gulp.import_classes
     end
 
     after(:each) do
-      ElegantImport.import_classes = @exisitng_import_classes
+      Gulp.import_classes = @exisitng_import_classes
     end
 
     it "returns a parameterized class name" do
@@ -40,28 +40,28 @@ module ElegantImport
     end
   
     it "should fetch all configured classes" do
-      ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
+      Gulp.import_classes = ["StudentInvoice", "OMRTest"]
       expect(Model.all).to eq [model("StudentInvoice"), model("OMRTest")]
     end
   
     describe ".first" do
       context "when there are multiple classes configured" do
         it "should fetch the first configured class" do
-          ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
+          Gulp.import_classes = ["StudentInvoice", "OMRTest"]
           expect(Model.first).to eq model("StudentInvoice")
         end
       end
 
       context "when there's a single class configured" do
         it "should fetch the configured class" do
-          ElegantImport.import_classes = ["OMRTest"]
+          Gulp.import_classes = ["OMRTest"]
           expect(Model.first).to eq model("OMRTest")
         end
       end
     
       context "when there are no configured classes" do
         it "should return nothing" do
-          ElegantImport.import_classes = []
+          Gulp.import_classes = []
           expect(Model.first).to be_nil
         end
       end
@@ -69,13 +69,13 @@ module ElegantImport
   
     describe ".find" do
       it "should find a model by its class name" do
-        ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
+        Gulp.import_classes = ["StudentInvoice", "OMRTest"]
         expect(Model.find("StudentInvoice")).to eq model("StudentInvoice")
         expect(Model.find("OMRTest")).to eq model("OMRTest")
       end
 
       it "should find a model by its parameterized name" do
-        ElegantImport.import_classes = ["StudentInvoice", "OMRTest"]
+        Gulp.import_classes = ["StudentInvoice", "OMRTest"]
         expect(Model.find("student_invoice")).to eq model("StudentInvoice")
         expect(Model.find("omr_test")).to eq model("OMRTest")
       end

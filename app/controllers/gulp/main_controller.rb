@@ -1,6 +1,6 @@
-require_dependency "elegant_import/application_controller"
+require_dependency "gulp/application_controller"
 
-module ElegantImport
+module Gulp
   class MainController < ApplicationController
     def index
       @selected_model = params[:model_name] ? Model.find(params[:model_name]) : Model.first

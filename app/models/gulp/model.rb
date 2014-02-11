@@ -1,4 +1,4 @@
-module ElegantImport
+module Gulp
   class Model 
     include ActiveModel::Model
     attr_accessor :class_name
@@ -25,7 +25,7 @@ module ElegantImport
     
     
     def self.all
-      ElegantImport.import_classes.collect {|class_name| Model.new(class_name: class_name)}
+      Gulp.import_classes.collect {|class_name| Model.new(class_name: class_name)}
     end
 
     def self.first

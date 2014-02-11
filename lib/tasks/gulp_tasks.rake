@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :elegant_import do
+# task :gulp do
 #   # Task goes here
 # end

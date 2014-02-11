@@ -1,1 +1,0 @@
-ElegantImport.import_classes = ["Student", "School"]

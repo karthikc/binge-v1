@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount ElegantImport::Engine => "/import"
+  mount Gulp::Engine => "/import"
 end
