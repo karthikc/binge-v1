@@ -55,23 +55,28 @@ module ElegantImport
           fixture_file_upload("schools_all_wrong_headers.csv", "text/text")
         end
 
+        let(:wrong_format_txt) do
+          extend ActionDispatch::TestProcess
+          fixture_file_upload("wrong_format.txt", "text/text")
+        end
+
         it "should contain the data file" do
           dataset = Dataset.new({})
           expect(dataset).to have(1).error_on(:data_file)
-          expect(dataset.errors_on(:data_file)).to include("can't be blank")
+          expect(dataset.errors_on(:data_file)).to include("Data file can't be blank")
         end
 
         it "should contain the model" do
           dataset = Dataset.new({})
           expect(dataset).to have(1).error_on(:model)
-          expect(dataset.errors_on(:model)).to include("can't be blank")
+          expect(dataset.errors_on(:model)).to include("Model can't be blank")
         end
       
         context "when only the header row is present" do
           it "should show an error message" do
             dataset = Dataset.new(data_file: schools_only_headers_csv, model: school_model)
             expect(dataset).to have(1).error_on(:data_file)
-            expect(dataset.errors_on(:data_file)).to include("should have atleast one data row")
+            expect(dataset.errors_on(:data_file)).to include("The file should have atleast one data row")
           end
         end
 
@@ -79,7 +84,7 @@ module ElegantImport
           it "should show an error message" do
             dataset = Dataset.new(data_file: empty_csv, model: school_model)
             expect(dataset).to have(1).error_on(:data_file)
-            expect(dataset.errors_on(:data_file)).to include("should have atleast one data row")
+            expect(dataset.errors_on(:data_file)).to include("The file should have atleast one data row")
           end
         end
 
@@ -87,7 +92,7 @@ module ElegantImport
           it "should show an error message with the missing attribute" do
             dataset = Dataset.new(data_file: schools_one_wrong_header_csv, model: school_model)
             expect(dataset).to have(1).error_on(:data_file)
-            expect(dataset.errors_on(:data_file)).to include("does not have the following columns: city")
+            expect(dataset.errors_on(:data_file)).to include("The file does not have the following required columns: city")
           end
         end
 
@@ -95,8 +100,14 @@ module ElegantImport
           it "should show an error message with all the attributes" do
             dataset = Dataset.new(data_file: schools_all_wrong_headers_csv, model: school_model)
             expect(dataset).to have(1).error_on(:data_file)
-            expect(dataset.errors_on(:data_file)).to include("does not have the following columns: name, city")
+            expect(dataset.errors_on(:data_file)).to include("The file does not have the following required columns: name, city")
           end
+        end
+
+        it "should not contain data in formats other than csv " do
+          dataset = Dataset.new(data_file: wrong_format_txt, model: school_model)
+          expect(dataset).to have(1).error_on(:data_file)
+          expect(dataset.errors_on(:data_file)).to include("You are not allowed to upload \"txt\" files, allowed types: csv")
         end
       end
     
