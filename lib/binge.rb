@@ -1,5 +1,5 @@
-require "gulp/engine"
+require "binge/engine"
 
-module Gulp
+module Binge
   mattr_accessor :import_classes
 end

@@ -1,6 +1,6 @@
-require_dependency "gulp/application_controller"
+require_dependency "binge/application_controller"
 
-module Gulp
+module Binge
   class MainController < ApplicationController
     def index
       @selected_model = params[:model_name] ? Model.find(params[:model_name]) : Model.first

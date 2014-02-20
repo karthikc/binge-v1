@@ -1,5 +1,5 @@
 require 'csv'
-module Gulp
+module Binge
 
   class Dataset
     include ActiveModel::Model

@@ -1,4 +1,4 @@
-module Gulp
+module Binge
   module ApplicationHelper
 
     def show_error_message(object, field_name)

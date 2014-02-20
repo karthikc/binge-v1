@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount Gulp::Engine => "/import"
+  mount Binge::Engine => "/import"
 end

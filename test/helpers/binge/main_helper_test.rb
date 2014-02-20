@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Gulp
+module Binge
   class MainHelperTest < ActionView::TestCase
   end
 end

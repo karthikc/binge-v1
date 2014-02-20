@@ -1,4 +1,4 @@
-module Gulp
+module Binge
   module MainHelper
   end
 end

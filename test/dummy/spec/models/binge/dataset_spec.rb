@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Gulp
+module Binge
 
   describe Dataset do
   

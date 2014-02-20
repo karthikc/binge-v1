@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Gulp
+module Binge
   class MainControllerTest < ActionController::TestCase
     # test "the truth" do
     #   assert true

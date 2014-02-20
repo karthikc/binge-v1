@@ -1,5 +1,5 @@
-module Gulp
+module Binge
   class Engine < ::Rails::Engine
-    isolate_namespace Gulp
+    isolate_namespace Binge
   end
 end

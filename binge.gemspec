@@ -1,17 +1,17 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "gulp/version"
+require "binge/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "gulp"
-  s.version     = Gulp::VERSION
+  s.name        = "binge"
+  s.version     = Binge::VERSION
   s.authors     = ["Karthik C"]
   s.email       = ["karthik.cs@gmail.com"]
   s.homepage    = "TODO"
   s.summary     = "A rails engine that helps users upload CSV data into excel with wonderful error reporting"
-  s.description = "TODO: Description of Gulp."
+  s.description = "TODO: Description of Binge."
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
