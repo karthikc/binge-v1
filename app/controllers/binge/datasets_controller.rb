@@ -15,22 +15,7 @@ module Binge
         render :new
         return
       end
-      
-      # uploader = DataUploader.new
-      # data_file = params['data_file']
-      # 
-      # 
-      # csv = CSV.new(data_file, :headers => true)
-      # rows = csv.to_a.map {|row| row.to_hash }
-      # 
-      # model_class = params[:model_name].classify.constantize
-      # rows.each do |row|
-      #   model_class.create!(row)
-      # end
-      
-      # uploader.store!(data_file)
-      # @file_name = uploader.filename
-      # @csv_file = uploader.retrieve_from_store!(@file_name)
     end
+    
   end
 end
