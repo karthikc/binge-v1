@@ -55,7 +55,7 @@
       <h4 class="panel-title">Upload Data File</h4>
     </div>
     <div class="panel-body">
-      <%= form_for @dataset, url: process_file_path, html: {multipart: true, id: "data_upload_form", role: "form"} do |f| %>
+      <%= form_for @dataset, html: {multipart: true, id: "data_upload_form", role: "form"} do |f| %>
         <%= f.hidden_field :model_class_name%>
         <div class="form-group <%='has-error' if has_errors?(@dataset, :data_file)%>">
           <%= f.file_field :data_file%>

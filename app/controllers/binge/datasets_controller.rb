@@ -1,17 +1,18 @@
 require_dependency "binge/application_controller"
 
 module Binge
-  class MainController < ApplicationController
-    def index
+  class DatasetsController < ApplicationController
+
+    def new
       @selected_model = params[:model_name] ? Model.find(params[:model_name]) : Model.first
       @dataset = Dataset.new(model: @selected_model)
     end
     
-    def process_file
+    def create
       @dataset = Dataset.new(params[:dataset])
       @selected_model = @dataset.model
       unless @dataset.valid?
-        render :index
+        render :new
         return
       end
       

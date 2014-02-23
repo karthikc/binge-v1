@@ -1,5 +1,5 @@
 Binge::Engine.routes.draw do
-  get '/:model_name', to: 'main#index', as: 'upload'
-  post '/process_file', to: 'main#process_file', as: 'process_file'
-  root to: "main#index"
+  get '/:model_name', to: 'datasets#new', as: 'upload'
+  root to: "datasets#new"
+  resources :datasets
 end
