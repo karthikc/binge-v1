@@ -23,6 +23,10 @@ module Binge
       self.class_name == other.class_name
     end
     
+    def create(attributes)
+      instance = klass.new(attributes)
+      instance.save if instance.valid?
+    end
     
     def self.all
       Binge.import_classes.collect {|class_name| Model.new(class_name: class_name)}

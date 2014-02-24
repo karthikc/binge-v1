@@ -27,6 +27,18 @@ module Binge
       model.class_name
     end
     
+    def import_valid
+      CSV::HeaderConverters[:to_attribute] = lambda do |header|
+        header.strip.to_sym
+      end
+      CSV::Converters[:strip] = lambda do |field|
+        field.blank? ? nil : field.strip
+      end
+      csv_data = CSV.new(data_file.read, headers: true, header_converters: :to_attribute, converters: [:strip, :all])
+      rows = csv_data.to_a.map {|row| row.to_hash }
+      rows.count {|row| model.create(row)}
+    end
+    
     private
     def csv
       @csv ||= CSV.parse(data_file.read)

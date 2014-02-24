@@ -15,6 +15,10 @@ module Binge
         render :new
         return
       end
+      number_of_rows = @dataset.import_valid
+      model_name = @selected_model.humanized_name.pluralize(number_of_rows)
+      @import_message = "#{number_of_rows} #{model_name} imported."
+      render :new
     end
     
   end

@@ -124,8 +124,38 @@ module Binge
     end
     
     describe "#import" do
+      let(:three_schools_csv) do
+        extend ActionDispatch::TestProcess
+        fixture_file_upload("3_valid_schools.csv", "text/text")
+      end
+      let(:two_schools_csv) do
+        extend ActionDispatch::TestProcess
+        fixture_file_upload("2_valid_1_invalid_school.csv", "text/text")
+      end
+
       it "should import all valid data into the databse" do
         dataset = Dataset.new(data_file: schools_csv, model: school_model)
+        expect(dataset.import_valid).to eq 1
+        expect(School).to have(1).record
+        expect(School.first.name).to eq "Baldwin Boys High School"
+      end
+
+      it "should import multiple rows into the databse" do
+        dataset = Dataset.new(data_file: three_schools_csv, model: school_model)
+        expect(dataset.import_valid).to eq 3
+        expect(School).to have(3).records
+
+        school_names = School.all.collect(&:name)
+        expect(school_names).to match_array ["Baldwin Boys High School", "St. Joseph's Boys School", "UCLA"]
+      end
+
+      it "should not import invalid rows into the databse" do
+        dataset = Dataset.new(data_file: two_schools_csv, model: school_model)
+        expect(dataset.import_valid).to eq 2
+        expect(School).to have(2).records
+
+        school_names = School.all.collect(&:name)
+        expect(school_names).to match_array ["Baldwin Boys High School", "St. Joseph's Boys School"]
       end
     end
   
