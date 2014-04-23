@@ -3,7 +3,7 @@ require 'spec_helper'
 module Binge
 
   describe Dataset do
-  
+
     let(:school_model) {Model.new(class_name: "School")}
     let(:empty_csv) do
       extend ActionDispatch::TestProcess
@@ -15,7 +15,7 @@ module Binge
     end
 
     describe "#initialize" do
-    
+
       context "when the model object is passed" do
         it "should initialize the model attribute" do
           dataset = Dataset.new(model: school_model)
@@ -29,21 +29,21 @@ module Binge
           expect(dataset.model).to eq school_model
         end
       end
-    
+
       it "should initialize the data_file attribute" do
         dataset = Dataset.new(data_file: empty_csv)
         expect(dataset.data_file.filename).to eq "empty.csv"
       end
 
     end
-    
+
     it "should return the model class name" do
       dataset = Dataset.new(model: school_model)
       expect(dataset.model_class_name).to eq "School"
     end
-    
+
     describe "#valid?" do
-    
+
       context "with invalid data" do
         let(:schools_only_headers_csv) do
           extend ActionDispatch::TestProcess
@@ -75,7 +75,7 @@ module Binge
           expect(dataset).to have(1).error_on(:model)
           expect(dataset.errors_on(:model)).to include("Model can't be blank")
         end
-      
+
         context "when only the header row is present" do
           it "should show an error message" do
             dataset = Dataset.new(data_file: schools_only_headers_csv, model: school_model)
@@ -114,7 +114,7 @@ module Binge
           expect(dataset.errors_on(:data_file)).to include("You are not allowed to upload \"txt\" files, allowed types: csv")
         end
       end
-    
+
       context "with valid data" do
         it "should have no errors when data file has valid rows" do
           dataset = Dataset.new(data_file: schools_csv, model: school_model)
@@ -122,7 +122,7 @@ module Binge
         end
       end
     end
-    
+
     describe "#import" do
       let(:three_schools_csv) do
         extend ActionDispatch::TestProcess
@@ -158,7 +158,7 @@ module Binge
         expect(school_names).to match_array ["Baldwin Boys High School", "St. Joseph's Boys School"]
       end
     end
-  
+
   end
 
 end

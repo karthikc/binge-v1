@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe "succesful import", :type => :feature do
-  
+
   before do
     visit '/import/school'
   end
-  
+
   it "shows the number of rows imported" do
     attach_file "dataset[data_file]", File.join(Rails.root, "spec", "fixtures", "3_valid_schools.csv")
     click_button "Submit"
@@ -35,6 +35,6 @@ describe "succesful import", :type => :feature do
       expect(page).to have_content "1 school imported"
     end
   end
-  
-  
+
+
 end

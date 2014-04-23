@@ -1,73 +1,101 @@
-<nav class="navbar navbar-default" role="navigation">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="<%=root_url%>">Binge</a>
-  </div>
-
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav">
-      <% Binge::Model.all.each do |model|%>
-        <li class='<%="active" if @selected_model.class_name == model.class_name%>'>
-          <a href="<%=upload_url(model.parameterized_class_name)%>"><%=model.class_name%></a>
-        </li>
-      <%end%>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="#">Back To Application</a></li>
-    </ul>
-  </div>
-</nav>
-
 <div id="page_content">
-
   <div class="page-header">
-    <h1><%=@selected_model.class_name%> <small>Bulk import <%=@selected_model.humanized_name%> data</small></h1>
+    <h1>
+      <%= @dataset.model.class_name %> <small>Bulk import <%= @dataset.model.humanized_name %> data</small>
+    </h1>
   </div>
 
   <div class="panel panel-default" id="attributes_panel">
     <div class="panel-heading">
       <h4 class="panel-title" data-toggle="collapse" data-target="#attributes_body">
-          Attributes <span id="attributes_status_icon" class="glyphicon glyphicon-chevron-right"></span>
+        Attributes <span id="attributes_status_icon" class="glyphicon glyphicon-chevron-right"></span>
       </h4>
     </div>
     <div class="panel-collapnse collapse" id="attributes_body">
       <div class="panel-body">
-        <%@selected_model.columns.in_groups_of(4, false).each do |group|%>
+        <% @dataset.model.columns.in_groups_of(4, false).each do |group| %>
         <div class="row">
-          <%group.each do |column|%>
+          <% group.each do |column| %>
           <div class="col-md-3">
-            <strong><%=column.name%></strong>: <%=column.type%>
+            <strong><%= column.name %></strong>: <%= column.type %>
           </div>
-          <%end%>
+          <% end %>
         </div>
-        <%end%>
+        <% end %>
       </div>
-    </div>  
+    </div>
   </div>
-    
+
+  <% if @import_results %>
+  <ul class="list-group">
+    <li class="list-group-item">
+      <span class="badge"><%= @import_results.total_rows_count %></span>
+      <span class='text-muted'>Total rows</span>
+    </li>
+    <li class="list-group-item">
+      <span class="badge badge-success"><%= @import_results.imported_rows_count %></span>
+      <span class='text-success'>Successful rows</span>
+    </li>
+    <li class="list-group-item">
+      <span class="badge badge-error"><%= @import_results.rows_with_errors.size %></span>
+      <span class='text-danger'>Failed rows</span>
+    </li>
+  </ul>
+
+    <% if @import_results.rows_with_errors.any? %>
+    <div class="panel panel-danger">
+      <div class="panel-heading errors-heading">
+        <h4 class="panel-title">
+          Errors
+        </h4>
+      </div>
+      <div class="panel-body table-responsive">
+        <table class="table table-condensed table-bordered errors-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <% @dataset.model.columns.each do |column| %>
+                <th><%= column.name.humanize %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% @import_results.rows_with_errors.each_with_index do |model, index| %>
+              <tr>
+                <td><%= index+1 %></td>
+                <% @dataset.model.columns.map(&:name).each do |column_name| %>
+                  <% if model.errors[column_name].any? %>
+                    <td id="error-cell">
+                      <div class="error-text" data-toggle="tooltip" title="<%= model.errors[column_name].join(', ') %>">
+                        <%= model.send(column_name) || 'NULL' %>
+                      </div>
+                    </td>
+                  <% else %>
+                    <td><%= model.send(column_name) %></td>
+                  <% end %>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <% end %>
+  <% end %>
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">Upload Data File</h4>
     </div>
     <div class="panel-body">
       <%= form_for @dataset, html: {multipart: true, id: "data_upload_form", role: "form"} do |f| %>
-        <%= f.hidden_field :model_class_name%>
-        <div class="form-group <%='has-error' if has_errors?(@dataset, :data_file)%>">
-          <%= f.file_field :data_file%>
-          <%=show_error_message(@dataset, :data_file)%>
+        <%= f.hidden_field :model_class_name %>
+        <div class="form-group <%= 'has-error' if has_errors?(@dataset, :data_file) %>">
+          <%= f.file_field :data_file %>
+          <%= show_error_message(@dataset, :data_file) %>
         </div>
-        <%=f.submit "Submit", class: "btn btn-default"%>
-      <%end%>  
+        <%= f.submit "Submit", class: "btn btn-default" %>
+      <% end %>
     </div>
   </div>
-  
-  <%if @import_message%>
-    <div class="alert alert-success"><%=@import_message%></div>
-  <%end%>
-  
 </div>

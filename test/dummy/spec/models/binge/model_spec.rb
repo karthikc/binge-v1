@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-class StudentInvoice 
+class StudentInvoice
 end
 
 module Binge
-  
+
   describe Model do
 
     before(:each) do
@@ -30,7 +30,7 @@ module Binge
     it "returns the associated class" do
       expect(model("StudentInvoice").klass).to eq StudentInvoice
     end
-  
+
     it "fetches all its important columns" do
       student_columns_names = model("Student").columns.collect(&:name)
       expect(student_columns_names).to eq ["name", "date_of_birth", "school_id"]
@@ -38,12 +38,12 @@ module Binge
       school_columns_names = model("School").columns.collect(&:name)
       expect(school_columns_names).to eq ["name", "city"]
     end
-  
+
     it "should fetch all configured classes" do
       Binge.import_classes = ["StudentInvoice", "OMRTest"]
       expect(Model.all).to eq [model("StudentInvoice"), model("OMRTest")]
     end
-  
+
     describe ".first" do
       context "when there are multiple classes configured" do
         it "should fetch the first configured class" do
@@ -58,7 +58,7 @@ module Binge
           expect(Model.first).to eq model("OMRTest")
         end
       end
-    
+
       context "when there are no configured classes" do
         it "should return nothing" do
           Binge.import_classes = []
@@ -66,7 +66,7 @@ module Binge
         end
       end
     end
-  
+
     describe ".find" do
       it "should find a model by its class name" do
         Binge.import_classes = ["StudentInvoice", "OMRTest"]
@@ -87,4 +87,4 @@ module Binge
 
   end
 
-end  
+end

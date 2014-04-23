@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = Binge::VERSION
   s.authors     = ["Karthik C"]
   s.email       = ["karthik.cs@gmail.com"]
-  s.homepage    = "TODO"
+  s.homepage    = "https://github.com/karthikc/binge"
   s.summary     = "A rails engine that helps users upload CSV data into excel with wonderful error reporting"
-  s.description = "TODO: Description of Binge."
+  s.description = "Description of Binge"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
