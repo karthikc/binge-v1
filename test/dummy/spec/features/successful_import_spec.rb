@@ -22,8 +22,8 @@ describe "succesful import", :type => :feature do
       expect(page).to have_content 'School'
       expect(page).to have_content 'Bulk import school data'
     end
-    within(".alert-success") do
-      expect(page).to have_content "3 schools imported"
+    within(".badge-success") do
+      expect(page).to have_content "3"
     end
   end
 
@@ -31,8 +31,8 @@ describe "succesful import", :type => :feature do
     attach_file "dataset[data_file]", File.join(Rails.root, "spec", "fixtures", "schools.csv")
     click_button "Submit"
 
-    within(".alert-success") do
-      expect(page).to have_content "1 school imported"
+    within(".badge-success") do
+      expect(page).to have_content "1"
     end
   end
 

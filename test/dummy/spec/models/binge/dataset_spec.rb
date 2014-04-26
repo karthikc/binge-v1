@@ -128,6 +128,7 @@ module Binge
         extend ActionDispatch::TestProcess
         fixture_file_upload("3_valid_schools.csv", "text/text")
       end
+
       let(:two_schools_csv) do
         extend ActionDispatch::TestProcess
         fixture_file_upload("2_valid_1_invalid_school.csv", "text/text")
@@ -135,14 +136,14 @@ module Binge
 
       it "should import all valid data into the databse" do
         dataset = Dataset.new(data_file: schools_csv, model: school_model)
-        expect(dataset.import_valid).to eq 1
+        expect(dataset.import_valid.rows_with_errors.size).to eq 0
         expect(School).to have(1).record
         expect(School.first.name).to eq "Baldwin Boys High School"
       end
 
       it "should import multiple rows into the databse" do
         dataset = Dataset.new(data_file: three_schools_csv, model: school_model)
-        expect(dataset.import_valid).to eq 3
+        expect(dataset.import_valid.rows_with_errors.size).to eq 0
         expect(School).to have(3).records
 
         school_names = School.all.collect(&:name)
@@ -151,7 +152,7 @@ module Binge
 
       it "should not import invalid rows into the databse" do
         dataset = Dataset.new(data_file: two_schools_csv, model: school_model)
-        expect(dataset.import_valid).to eq 2
+        expect(dataset.import_valid.rows_with_errors.size).to eq 1
         expect(School).to have(2).records
 
         school_names = School.all.collect(&:name)

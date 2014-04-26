@@ -17,10 +17,7 @@
   background: green;
 }
 
-#error-cell {
-  color: #a94442;
-  border: solid;
-}
+#error-cell { color: #a94442; }
 
 .badge-success { background-color: #3c763d; }
 .badge-error   { background-color: #a94442; }

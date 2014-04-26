@@ -34,7 +34,7 @@
     </li>
     <li class="list-group-item">
       <span class="badge badge-success"><%= @import_results.imported_rows_count %></span>
-      <span class='text-success'>Successful rows</span>
+      <span class='text-success'>Imported rows</span>
     </li>
     <li class="list-group-item">
       <span class="badge badge-error"><%= @import_results.rows_with_errors.size %></span>
@@ -54,8 +54,8 @@
           <thead>
             <tr>
               <th>#</th>
-              <% @dataset.model.columns.each do |column| %>
-                <th><%= column.name.humanize %></th>
+              <% @dataset.model.column_names.each do |column| %>
+                <th><%= column.humanize %></th>
               <% end %>
             </tr>
           </thead>
@@ -63,16 +63,8 @@
             <% @import_results.rows_with_errors.each_with_index do |model, index| %>
               <tr>
                 <td><%= index+1 %></td>
-                <% @dataset.model.columns.map(&:name).each do |column_name| %>
-                  <% if model.errors[column_name].any? %>
-                    <td id="error-cell">
-                      <div class="error-text" data-toggle="tooltip" title="<%= model.errors[column_name].join(', ') %>">
-                        <%= model.send(column_name) || 'NULL' %>
-                      </div>
-                    </td>
-                  <% else %>
-                    <td><%= model.send(column_name) %></td>
-                  <% end %>
+                <% @dataset.model.column_names.each do |column_name| %>
+                  <%= cell_value(model, column_name) %>
                 <% end %>
               </tr>
             <% end %>

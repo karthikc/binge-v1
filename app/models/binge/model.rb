@@ -13,11 +13,15 @@ module Binge
     end
 
     def klass
-      class_name.constantize
+      @klass ||= class_name.constantize
     end
 
     def columns
       klass.columns.reject {|column| ["id", "created_at", "updated_at"].include?(column.name)}
+    end
+
+    def column_names
+      @column_names ||= columns.map(&:name)
     end
 
     def ==(other)

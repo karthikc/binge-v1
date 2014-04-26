@@ -8,26 +8,21 @@ module Binge
 
     def initialize(base)
       @base = base
+      @rows_with_errors = []
 
       define_converters
     end
 
     def import
-      total_rows        = csv_data.to_a.map(&:to_hash)
+      total_rows = csv_data.to_a.map(&:to_hash)
       @total_rows_count = total_rows.size
-      @rows_with_errors = total_rows.collect do |row_hash|
 
-        model = @base.model.create(row_hash)
-        if model.errors.any?
-          # build an object with keys
-          # Struct.new(*row_hash.keys)
-          model
-        else
-          nil
+      @base.model.klass.transaction do
+        total_rows.each do |row_hash|
+          model = @base.model.create(row_hash)
+          @rows_with_errors << model if model.errors.any?
         end
-      end.compact
-
-      self
+      end
     end
 
     def imported_rows_count

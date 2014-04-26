@@ -31,6 +31,7 @@ module Binge
     def import_valid
       importer = CsvImporter.new(self)
       importer.import
+      importer
     end
 
     private
@@ -48,9 +49,8 @@ module Binge
       return if rows.empty?
 
       headers = rows.first.collect(&:strip)
-      missing_columns = model.columns.reject {|column| headers.include?(column.name)}
-      missing_column_names = missing_columns.collect(&:name).join(", ")
-      return if missing_columns.empty?
+      missing_column_names = model.column_names.reject {|column_name| headers.include?(column_name)}.join(", ")
+      return if missing_column_names.empty?
       self.errors.add(:data_file, "The file does not have the following required columns: #{missing_column_names}")
     end
   end
