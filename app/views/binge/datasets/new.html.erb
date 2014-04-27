@@ -53,18 +53,18 @@
         <table class="table table-condensed table-bordered errors-table">
           <thead>
             <tr>
-              <th>#</th>
+              <th>Row Number</th>
               <% @dataset.model.column_names.each do |column| %>
                 <th><%= column.humanize %></th>
               <% end %>
             </tr>
           </thead>
           <tbody>
-            <% @import_results.rows_with_errors.each_with_index do |model, index| %>
+            <% @import_results.rows_with_errors.each do |row| %>
               <tr>
-                <td><%= index+1 %></td>
+                <td><%= row[:row_number] %></td>
                 <% @dataset.model.column_names.each do |column_name| %>
-                  <%= cell_value(model, column_name) %>
+                  <%= cell_value(row[:model], column_name) %>
                 <% end %>
               </tr>
             <% end %>

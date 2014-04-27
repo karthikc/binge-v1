@@ -18,9 +18,9 @@ module Binge
       @total_rows_count = total_rows.size
 
       @base.model.klass.transaction do
-        total_rows.each do |row_hash|
+        total_rows.each_with_index do |row_hash, index|
           model = @base.model.create(row_hash)
-          @rows_with_errors << model if model.errors.any?
+          @rows_with_errors << {row_number: index+1, model: model} if model.errors.any?
         end
       end
     end

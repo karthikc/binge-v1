@@ -5,17 +5,18 @@ module Binge
   describe Dataset do
 
     let(:school_model) {Model.new(class_name: "School")}
+
     let(:empty_csv) do
       extend ActionDispatch::TestProcess
       fixture_file_upload("empty.csv", "text/text")
     end
+
     let(:schools_csv) do
       extend ActionDispatch::TestProcess
       fixture_file_upload("schools.csv", "text/text")
     end
 
     describe "#initialize" do
-
       context "when the model object is passed" do
         it "should initialize the model attribute" do
           dataset = Dataset.new(model: school_model)
@@ -34,21 +35,22 @@ module Binge
         dataset = Dataset.new(data_file: empty_csv)
         expect(dataset.data_file.filename).to eq "empty.csv"
       end
-
     end
 
-    it "should return the model class name" do
-      dataset = Dataset.new(model: school_model)
-      expect(dataset.model_class_name).to eq "School"
+    describe "#model_class_name" do
+      it "should return the model class name" do
+        dataset = Dataset.new(model: school_model)
+        expect(dataset.model_class_name).to eq "School"
+      end
     end
 
     describe "#valid?" do
-
       context "with invalid data" do
         let(:schools_only_headers_csv) do
           extend ActionDispatch::TestProcess
           fixture_file_upload("schools_only_headers.csv", "text/text")
         end
+
         let(:schools_one_wrong_header_csv) do
           extend ActionDispatch::TestProcess
           fixture_file_upload("schools_one_wrong_header.csv", "text/text")
@@ -123,7 +125,7 @@ module Binge
       end
     end
 
-    describe "#import" do
+    describe "#import_valid" do
       let(:three_schools_csv) do
         extend ActionDispatch::TestProcess
         fixture_file_upload("3_valid_schools.csv", "text/text")
@@ -132,6 +134,11 @@ module Binge
       let(:two_schools_csv) do
         extend ActionDispatch::TestProcess
         fixture_file_upload("2_valid_1_invalid_school.csv", "text/text")
+      end
+
+      it "should return instance of Binge::CsvImporter" do
+        dataset = Dataset.new(data_file: schools_csv, model: school_model)
+        expect(dataset.import_valid).to be_an_instance_of Binge::CsvImporter
       end
 
       it "should import all valid data into the databse" do
@@ -159,7 +166,5 @@ module Binge
         expect(school_names).to match_array ["Baldwin Boys High School", "St. Joseph's Boys School"]
       end
     end
-
   end
-
 end
