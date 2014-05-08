@@ -9,8 +9,6 @@ module Binge
     def initialize(base)
       @base = base
       @rows_with_errors = []
-
-      define_converters
     end
 
     def import
@@ -30,15 +28,6 @@ module Binge
     end
 
     private
-
-    def define_converters
-      CSV::HeaderConverters[:to_attribute] = lambda do |header|
-        header.strip.to_sym
-      end
-      CSV::Converters[:strip] = lambda do |field|
-        field.blank? ? nil : field.strip
-      end
-    end
 
     def csv_data
       CSV.new(@base.data_file.read,

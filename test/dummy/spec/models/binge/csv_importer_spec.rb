@@ -19,11 +19,6 @@ module Binge
         rows_with_errors = @csv_importer.instance_variable_get(:@rows_with_errors)
         expect(rows_with_errors).to eq []
       end
-
-      it "defines CSV converters" do
-        expect(CSV::HeaderConverters.has_key?(:to_attribute)).to eq true
-        expect(CSV::Converters.has_key?(:strip)).to eq true
-      end
     end
 
   end

@@ -136,11 +136,6 @@ module Binge
         fixture_file_upload("2_valid_1_invalid_school.csv", "text/text")
       end
 
-      it "should return instance of Binge::CsvImporter" do
-        dataset = Dataset.new(data_file: schools_csv, model: school_model)
-        expect(dataset.import_valid).to be_an_instance_of Binge::CsvImporter
-      end
-
       it "should import all valid data into the databse" do
         dataset = Dataset.new(data_file: schools_csv, model: school_model)
         expect(dataset.import_valid.rows_with_errors.size).to eq 0

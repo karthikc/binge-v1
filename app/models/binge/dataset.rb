@@ -1,5 +1,3 @@
-require 'csv'
-
 module Binge
   class Dataset
     include ActiveModel::Model
@@ -36,20 +34,21 @@ module Binge
 
     private
 
-    def csv
-      @csv ||= CSV.parse(data_file.read)
+    def file
+      @file ||= CsvFile.new(data_file)
     end
 
     def atleast_one_row
-      self.errors.add(:data_file, "The file should have atleast one data row") if csv.to_a.size <= 1
+      self.errors.add(:data_file, "The file should have atleast one data row") if file.size < 1
     end
 
     def header_matches_model_attributes
-      rows = csv.to_a
-      return if rows.empty?
+      return if file.empty?
 
-      headers = rows.first.collect(&:strip)
-      missing_column_names = model.column_names.reject {|column_name| headers.include?(column_name)}.join(", ")
+      missing_column_names = model.column_names.reject do |column_name|
+        file.has_header?(column_name)
+      end.join(", ")
+
       return if missing_column_names.empty?
       self.errors.add(:data_file, "The file does not have the following required columns: #{missing_column_names}")
     end

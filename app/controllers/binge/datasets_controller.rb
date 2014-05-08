@@ -8,13 +8,7 @@ module Binge
 
     def create
       @dataset = Dataset.new(params[:dataset])
-
-      @import_results = if @dataset.valid?
-        @dataset.import_valid
-      else
-        nil
-      end
-
+      @import_results = @dataset.valid? ? @dataset.import_valid : nil
       render :new
     end
 
