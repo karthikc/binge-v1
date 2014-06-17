@@ -26,17 +26,20 @@ module Binge
       model.class_name
     end
 
+    # Returns nil if self is invalid,
+    # otherwise imports file.
     def import_valid
-      importer = CsvImporter.new(self)
-      importer.import
-      importer
-    end
+      return unless valid?
 
-    private
+      file.import(self.model)
+      file
+    end
 
     def file
       @file ||= CsvFile.new(data_file)
     end
+
+    private
 
     def atleast_one_row
       self.errors.add(:data_file, "The file should have atleast one data row") if file.size < 1
