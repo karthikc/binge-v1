@@ -1,5 +1,7 @@
 module Binge
   class DatasetsController < ApplicationController
+    
+    layout 'layouts/binge/application'
 
     def new
       selected_model = find_selected_model(params[:model_name])
