@@ -10,5 +10,5 @@ jQuery(function($){
     $("#attributes_status_icon").removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-right");
   });
 
-  $('.error-text').tooltip({container: 'td'});
+  $('.error-text').tooltip();
 });

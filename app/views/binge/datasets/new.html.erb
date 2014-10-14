@@ -27,42 +27,48 @@
   </div>
 
   <% if @import_results %>
-    <ul class="list-group">
-      <li class="list-group-item">
+    <ul id="import-results" class="list-group">
+      <li id="total-rows" class="list-group-item">
         <span class="badge"><%= @import_results.total_rows_count %></span>
         <span class='text-muted'>Total rows</span>
       </li>
-      <li class="list-group-item">
+
+      <li id="successful-rows" class="list-group-item">
         <span class="badge badge-success"><%= @import_results.imported_rows_count %></span>
         <span class='text-success'>Imported rows</span>
       </li>
-      <li class="list-group-item">
+
+      <li id="failed-rows" class="list-group-item">
         <span class="badge badge-error"><%= @import_results.rows_with_errors.size %></span>
         <span class='text-danger'>Failed rows</span>
       </li>
     </ul>
 
     <% if @import_results.rows_with_errors.any? %>
-    <div class="panel panel-danger">
+    <div id="error-report" class="panel panel-danger">
       <div class="panel-heading errors-heading">
         <h4 class="panel-title">
           Errors
         </h4>
       </div>
+
       <div class="panel-body table-responsive">
         <table class="table table-condensed table-bordered errors-table">
           <thead>
             <tr>
               <th>Row Number</th>
+
               <% @dataset.model.column_names.each do |column| %>
                 <th><%= column.humanize %></th>
               <% end %>
             </tr>
           </thead>
+
           <tbody>
             <% @import_results.rows_with_errors.each do |row| %>
               <tr>
                 <td><%= row[:row_number] %></td>
+
                 <% @dataset.model.column_names.each do |column_name| %>
                   <%= cell_value(row[:model], column_name) %>
                 <% end %>
@@ -71,6 +77,7 @@
           </tbody>
         </table>
       </div>
+
     </div>
     <% end %>
   <% end %>
@@ -90,4 +97,5 @@
       <% end %>
     </div>
   </div>
+
 </div>

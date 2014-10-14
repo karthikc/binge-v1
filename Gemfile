@@ -21,5 +21,7 @@ group :test, :development do
   gem 'rspec-rails', '~> 2.0'
   gem 'shoulda-matchers', '~> 2.6.1'
   gem 'capybara'
+  gem 'selenium-webdriver'
   gem 'debugger'
+  gem 'database_cleaner', '~> 1.3.0'
 end

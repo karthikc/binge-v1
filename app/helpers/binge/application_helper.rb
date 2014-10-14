@@ -18,7 +18,7 @@ module Binge
 
       return content_tag(:td, column_value) if column_errors.empty?
 
-      content_tag :td, id: "error-cell" do
+      content_tag :td, class: "error-cell" do
         error_title = "#{column_errors.join(', ')} "
         content_tag :div, class: "error-text", :'data-toggle' => "tooltip", title: error_title do
           column_value || 'NULL'
