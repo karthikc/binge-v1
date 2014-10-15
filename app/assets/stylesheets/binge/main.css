@@ -3,15 +3,23 @@
   They will automatically be included in application.css.
 */
 
-#attributes_panel .panel-heading {
-  cursor: pointer;
-}
+.panel-title    { font-weight: bold; }
+.panel-heading  { cursor: pointer; }
+.errors-heading { cursor: default; }
 
-#attributes_status_icon {
-  float: right;
-}
+.errors-table th { text-align: center; }
+.errors-table td { text-align: center; }
+
+#attributes_status_icon { float: right; }
 
 .bar {
-    height: 18px;
-    background: green;
+  height: 18px;
+  background: green;
 }
+
+.error-cell { color: #a94442; }
+
+.badge-success { background-color: #3c763d; }
+.badge-error   { background-color: #a94442; }
+
+.list-group-item { font-weight: bold; }

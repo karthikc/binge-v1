@@ -3,19 +3,20 @@ require 'spec_helper'
 module Binge
 
   describe Dataset do
-  
+
     let(:school_model) {Model.new(class_name: "School")}
+
     let(:empty_csv) do
       extend ActionDispatch::TestProcess
       fixture_file_upload("empty.csv", "text/text")
     end
+
     let(:schools_csv) do
       extend ActionDispatch::TestProcess
       fixture_file_upload("schools.csv", "text/text")
     end
 
     describe "#initialize" do
-    
       context "when the model object is passed" do
         it "should initialize the model attribute" do
           dataset = Dataset.new(model: school_model)
@@ -29,26 +30,27 @@ module Binge
           expect(dataset.model).to eq school_model
         end
       end
-    
+
       it "should initialize the data_file attribute" do
         dataset = Dataset.new(data_file: empty_csv)
         expect(dataset.data_file.filename).to eq "empty.csv"
       end
+    end
 
+    describe "#model_class_name" do
+      it "should return the model class name" do
+        dataset = Dataset.new(model: school_model)
+        expect(dataset.model_class_name).to eq "School"
+      end
     end
-    
-    it "should return the model class name" do
-      dataset = Dataset.new(model: school_model)
-      expect(dataset.model_class_name).to eq "School"
-    end
-    
+
     describe "#valid?" do
-    
       context "with invalid data" do
         let(:schools_only_headers_csv) do
           extend ActionDispatch::TestProcess
           fixture_file_upload("schools_only_headers.csv", "text/text")
         end
+
         let(:schools_one_wrong_header_csv) do
           extend ActionDispatch::TestProcess
           fixture_file_upload("schools_one_wrong_header.csv", "text/text")
@@ -75,7 +77,7 @@ module Binge
           expect(dataset).to have(1).error_on(:model)
           expect(dataset.errors_on(:model)).to include("Model can't be blank")
         end
-      
+
         context "when only the header row is present" do
           it "should show an error message" do
             dataset = Dataset.new(data_file: schools_only_headers_csv, model: school_model)
@@ -114,7 +116,7 @@ module Binge
           expect(dataset.errors_on(:data_file)).to include("You are not allowed to upload \"txt\" files, allowed types: csv")
         end
       end
-    
+
       context "with valid data" do
         it "should have no errors when data file has valid rows" do
           dataset = Dataset.new(data_file: schools_csv, model: school_model)
@@ -122,12 +124,13 @@ module Binge
         end
       end
     end
-    
-    describe "#import" do
+
+    describe "#import_valid" do
       let(:three_schools_csv) do
         extend ActionDispatch::TestProcess
         fixture_file_upload("3_valid_schools.csv", "text/text")
       end
+
       let(:two_schools_csv) do
         extend ActionDispatch::TestProcess
         fixture_file_upload("2_valid_1_invalid_school.csv", "text/text")
@@ -135,14 +138,14 @@ module Binge
 
       it "should import all valid data into the databse" do
         dataset = Dataset.new(data_file: schools_csv, model: school_model)
-        expect(dataset.import_valid).to eq 1
+        expect(dataset.import_valid.rows_with_errors.size).to eq 0
         expect(School).to have(1).record
         expect(School.first.name).to eq "Baldwin Boys High School"
       end
 
       it "should import multiple rows into the databse" do
         dataset = Dataset.new(data_file: three_schools_csv, model: school_model)
-        expect(dataset.import_valid).to eq 3
+        expect(dataset.import_valid.rows_with_errors.size).to eq 0
         expect(School).to have(3).records
 
         school_names = School.all.collect(&:name)
@@ -151,14 +154,12 @@ module Binge
 
       it "should not import invalid rows into the databse" do
         dataset = Dataset.new(data_file: two_schools_csv, model: school_model)
-        expect(dataset.import_valid).to eq 2
+        expect(dataset.import_valid.rows_with_errors.size).to eq 1
         expect(School).to have(2).records
 
         school_names = School.all.collect(&:name)
         expect(school_names).to match_array ["Baldwin Boys High School", "St. Joseph's Boys School"]
       end
     end
-  
   end
-
 end

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe "show import error messages", :type => :feature do
-  
+
   before do
     visit '/import'
   end
-  
+
   it "shows an error message when no file is selected" do
     click_button "Submit"
     expect(page).to have_content "Data file can't be blank"
@@ -16,5 +16,5 @@ describe "show import error messages", :type => :feature do
     click_button "Submit"
     expect(page).to have_content "The file should have atleast one data row"
   end
-  
+
 end

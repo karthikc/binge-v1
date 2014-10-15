@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe "succesful import", :type => :feature do
-  
+
   before do
     visit '/import/school'
   end
-  
+
   it "shows the number of rows imported" do
     attach_file "dataset[data_file]", File.join(Rails.root, "spec", "fixtures", "3_valid_schools.csv")
     click_button "Submit"
@@ -14,27 +14,15 @@ describe "succesful import", :type => :feature do
       expect(find('li.active')).to_not have_link 'Student'
       expect(find('li.active')).to have_link 'School'
     end
+
     within("#attributes_body") do
       expect(page).to have_content 'name: string'
       expect(page).to have_content 'city: string'
     end
+
     within(".page-header") do
       expect(page).to have_content 'School'
       expect(page).to have_content 'Bulk import school data'
     end
-    within(".alert-success") do
-      expect(page).to have_content "3 schools imported"
-    end
   end
-
-  it "shows the number of rows imported when importing a single row" do
-    attach_file "dataset[data_file]", File.join(Rails.root, "spec", "fixtures", "schools.csv")
-    click_button "Submit"
-
-    within(".alert-success") do
-      expect(page).to have_content "1 school imported"
-    end
-  end
-  
-  
 end

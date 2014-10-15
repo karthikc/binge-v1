@@ -1,10 +1,9 @@
 require 'spec_helper'
 
-class StudentInvoice 
+class StudentInvoice
 end
 
 module Binge
-  
   describe Model do
 
     before(:each) do
@@ -30,20 +29,54 @@ module Binge
     it "returns the associated class" do
       expect(model("StudentInvoice").klass).to eq StudentInvoice
     end
-  
-    it "fetches all its important columns" do
-      student_columns_names = model("Student").columns.collect(&:name)
-      expect(student_columns_names).to eq ["name", "date_of_birth", "school_id"]
 
-      school_columns_names = model("School").columns.collect(&:name)
-      expect(school_columns_names).to eq ["name", "city"]
+    describe "#columns" do
+      it "fetches all its important columns" do
+        student_columns = model("Student").columns.collect(&:name)
+        expect(student_columns).to eq ["name", "date_of_birth", "school_id"]
+
+        school_columns = model("School").columns.collect(&:name)
+        expect(school_columns).to eq ["name", "city"]
+      end
     end
-  
-    it "should fetch all configured classes" do
-      Binge.import_classes = ["StudentInvoice", "OMRTest"]
-      expect(Model.all).to eq [model("StudentInvoice"), model("OMRTest")]
+
+    describe "#column_names" do
+      it "fetches all important column names" do
+        student_columns_names = model("Student").column_names
+        expect(student_columns_names).to eq ["name", "date_of_birth", "school_id"]
+
+        school_columns_names = model("School").column_names
+        expect(school_columns_names).to eq ["name", "city"]
+      end
     end
-  
+
+    describe "#create" do
+      context "with valid attributes" do
+        it "saves associated model" do
+          valid_attributes = { name: 'Baldwin Boys High School', city: 'Bangalore' }
+          school = model("School").create(valid_attributes)
+          expect(school).to be_an_instance_of School
+          expect(school.persisted?).to eq true
+        end
+      end
+
+      context "with invalid attributes" do
+        it "doesn't saves associated model" do
+          invalid_attributes = { name: '', city: 'Bangalore' }
+          school = model("School").create(invalid_attributes)
+          expect(school).to be_an_instance_of School
+          expect(school.persisted?).to eq false
+        end
+      end
+    end
+
+    describe ".all" do
+      it "should fetch all configured classes" do
+        Binge.import_classes = ["StudentInvoice", "OMRTest"]
+        expect(Model.all).to eq [model("StudentInvoice"), model("OMRTest")]
+      end
+    end
+
     describe ".first" do
       context "when there are multiple classes configured" do
         it "should fetch the first configured class" do
@@ -58,7 +91,7 @@ module Binge
           expect(Model.first).to eq model("OMRTest")
         end
       end
-    
+
       context "when there are no configured classes" do
         it "should return nothing" do
           Binge.import_classes = []
@@ -66,16 +99,18 @@ module Binge
         end
       end
     end
-  
+
     describe ".find" do
-      it "should find a model by its class name" do
+      before do
         Binge.import_classes = ["StudentInvoice", "OMRTest"]
+      end
+
+      it "should find a model by its class name" do
         expect(Model.find("StudentInvoice")).to eq model("StudentInvoice")
         expect(Model.find("OMRTest")).to eq model("OMRTest")
       end
 
       it "should find a model by its parameterized name" do
-        Binge.import_classes = ["StudentInvoice", "OMRTest"]
         expect(Model.find("student_invoice")).to eq model("StudentInvoice")
         expect(Model.find("omr_test")).to eq model("OMRTest")
       end
@@ -86,5 +121,4 @@ module Binge
     end
 
   end
-
-end  
+end
