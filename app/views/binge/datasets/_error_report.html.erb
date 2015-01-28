@@ -1,0 +1,33 @@
+<div id="error-report" class="panel panel-danger">
+  <div class="panel-heading errors-heading">
+    <h4 class="panel-title">
+      Error Report
+    </h4>
+  </div>
+
+  <div class="panel-body table-responsive">
+    <table class="table table-condensed table-bordered errors-table">
+      <thead>
+        <tr>
+          <th>Row Number</th>
+
+          <% model.column_names.each do |column| %>
+            <th><%= column.humanize %></th>
+          <% end %>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% results.rows_with_errors.each do |row| %>
+          <tr>
+            <td><%= row[:row_number] %></td>
+
+            <% model.column_names.each do |column_name| %>
+              <%= cell_value(row[:model], column_name) %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

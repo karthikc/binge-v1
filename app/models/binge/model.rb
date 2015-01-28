@@ -34,6 +34,12 @@ module Binge
       instance
     end
 
+    def validate(attributes)
+      instance = klass.new(attributes)
+      instance.valid?
+      instance
+    end
+
     def self.all
       Binge.import_classes.collect {|class_name| Model.new(class_name: class_name)}
     end

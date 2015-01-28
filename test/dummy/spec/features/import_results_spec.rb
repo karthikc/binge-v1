@@ -10,7 +10,7 @@ describe 'show import results', :type => :feature do
   it 'shows total, successful and failed rows count' do
     click_button('Submit')
 
-    within('#import-results') do
+    within('#import-summary') do
       within('#total-rows') do
         expect(page).to have_content 'Total rows'
         expect(page).to have_content '3'

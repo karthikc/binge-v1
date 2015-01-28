@@ -1,0 +1,42 @@
+<div id="page_content">
+  <div class="page-header">
+    <h1>
+      <%= @dataset.model.class_name %> <small>Preview import data</small>
+    </h1>
+  </div>
+
+  <ul id="import-summary" class="list-group">
+    <li id="total-rows" class="list-group-item">
+      <span class="badge">
+        <%= @import_results.total_rows_count %>
+      </span>
+      <span class='text-muted'>Total rows</span>
+    </li>
+
+    <li id="successful-rows" class="list-group-item">
+      <span class="badge badge-success">
+        <%= @import_results.imported_rows_count %>
+      </span>
+      <span class='text-success'>Valid rows</span>
+    </li>
+
+    <li id="failed-rows" class="list-group-item">
+      <span class="badge badge-error">
+        <%= @import_results.rows_with_errors.size %>
+      </span>
+      <span class='text-danger'>Invalid rows</span>
+    </li>
+  </ul>
+
+  <div class="mb30">
+    <%= form_for @dataset, html: {multipart: true, id: "data_upload_form", role: "form"} do |f| %>
+      <%= f.hidden_field :model_class_name %>
+      <%= f.hidden_field :data_file_cache %>
+      <%= f.submit "Import Valid Rows", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+
+  <% if @import_results.rows_with_errors.any? %>
+    <%= render 'error_report', results: @import_results, model: @dataset.model %>
+  <% end %>
+</div>

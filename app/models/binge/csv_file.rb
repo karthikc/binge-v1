@@ -23,9 +23,16 @@ module Binge
     def import(model)
       model.klass.transaction do
         file.each_with_index do |row, index|
-          _model = model.create(row.to_hash)
-          @rows_with_errors << {row_number: index+1, model: _model} if _model.errors.any?
+          model_instance = model.create(row.to_hash)
+          push_errors(index, model_instance)
         end
+      end
+    end
+
+    def preview(model)
+      file.each_with_index do |row, index|
+        model_instance = model.validate(row.to_hash)
+        push_errors(index, model_instance)
       end
     end
 
@@ -41,5 +48,9 @@ module Binge
       converters: [:strip, :all]
     }
 
+    def push_errors(index, model_instance)
+      return  unless model_instance.errors.any?
+      @rows_with_errors << {row_number: index+1, model: model_instance}
+    end
   end
 end

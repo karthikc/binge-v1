@@ -11,4 +11,14 @@ jQuery(function($){
   });
 
   $('.error-text').tooltip();
+
+  // Preview errors...
+  $('#preview_button').click(function (event) {
+    event.preventDefault();
+    var form = $(this).parent('#data_upload_form');
+
+    form.attr('action', '/import/datasets/preview');
+
+    $(form).submit();
+  });
 });

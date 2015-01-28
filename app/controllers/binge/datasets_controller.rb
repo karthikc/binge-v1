@@ -1,6 +1,6 @@
 module Binge
   class DatasetsController < ApplicationController
-    
+
     layout 'layouts/binge/application'
 
     def new
@@ -12,6 +12,11 @@ module Binge
       @dataset        = Dataset.new(params[:dataset])
       @import_results = @dataset.import_valid
       render :new
+    end
+
+    def preview
+      @dataset        = Dataset.new(params[:dataset])
+      @import_results = @dataset.preview_valid
     end
 
     private

@@ -35,6 +35,15 @@ module Binge
       file
     end
 
+    # Returns nil if self is invalid,
+    # otherwise previews file.
+    def preview_valid
+      return unless valid?
+
+      file.preview(self.model)
+      file
+    end
+
     def file
       @file ||= CsvFile.new(data_file)
     end
