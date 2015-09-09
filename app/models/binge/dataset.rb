@@ -1,8 +1,15 @@
+require 'forwardable'
+
 module Binge
   class Dataset
     include ActiveModel::Model
     extend CarrierWave::Mount
     include CarrierWave::Validations::ActiveModel
+    extend Forwardable
+
+    def_delegators :import_result, :total_rows,
+                                   :failed_rows,
+                                   :imported_rows
 
     attr_accessor :data_file, :model
     mount_uploader :data_file, DataUploader
@@ -46,6 +53,14 @@ module Binge
 
     def file
       @file ||= CsvFile.new(data_file)
+    end
+
+    def has_result?
+      data_file.present?
+    end
+
+    def import_result
+      @import_result ||= ImportResult.new(@file)
     end
 
     private

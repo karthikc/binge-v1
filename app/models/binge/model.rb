@@ -17,7 +17,10 @@ module Binge
     end
 
     def columns
-      klass.columns.reject {|column| ["id", "created_at", "updated_at"].include?(column.name)}
+      klass.fields.collect do |f|
+        next if ["_id", "created_at", "updated_at"].include?(f.last.name)
+        f.last
+      end.compact
     end
 
     def column_names

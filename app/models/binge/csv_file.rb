@@ -5,14 +5,12 @@ module Binge
   class CsvFile
     extend Forwardable
 
-    def_delegators :file, :headers, :size, :empty?
+    def_delegators :data, :headers, :size, :empty?
 
-    attr_reader :file, :rows_with_errors
+    attr_reader :data, :rows_with_errors
 
-    alias_method :total_rows_count, :size
-
-    def initialize(file)
-      @file = CSV.parse(file.read, OPTIONS)
+    def initialize(data)
+      @data = CSV.parse(data.read, OPTIONS)
       @rows_with_errors = []
     end
 
@@ -22,7 +20,7 @@ module Binge
 
     def import(model)
       model.klass.transaction do
-        file.each_with_index do |row, index|
+        data.each_with_index do |row, index|
           model_instance = model.create(row.to_hash)
           push_errors(index, model_instance)
         end
@@ -30,14 +28,18 @@ module Binge
     end
 
     def preview(model)
-      file.each_with_index do |row, index|
+      data.each_with_index do |row, index|
         model_instance = model.validate(row.to_hash)
         push_errors(index, model_instance)
       end
     end
 
-    def imported_rows_count
-      total_rows_count - rows_with_errors.size
+    def errors_count
+      rows_with_errors.size
+    end
+
+    def has_errors?
+      rows_with_errors.any?
     end
 
     private
@@ -45,11 +47,12 @@ module Binge
     OPTIONS = {
       headers: true,
       header_converters: :to_attribute,
+      skip_blanks: true,
       converters: [:strip, :all]
     }
 
     def push_errors(index, model_instance)
-      return  unless model_instance.errors.any?
+      return unless model_instance.errors.any?
       @rows_with_errors << {row_number: index+1, model: model_instance}
     end
   end

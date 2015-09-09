@@ -10,9 +10,6 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-# To use debugger
-# gem 'debugger'
-
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "carrierwave"
@@ -22,6 +19,7 @@ group :test, :development do
   gem 'shoulda-matchers', '~> 2.6.1'
   gem 'capybara'
   gem 'selenium-webdriver'
-  gem 'debugger'
+  gem 'byebug'
   gem 'database_cleaner', '~> 1.3.0'
+  gem 'awesome_print'
 end

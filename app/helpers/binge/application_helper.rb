@@ -25,5 +25,6 @@ module Binge
         end
       end
     end
+
   end
 end

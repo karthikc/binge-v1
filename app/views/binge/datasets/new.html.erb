@@ -27,32 +27,32 @@
     </div>
   </div>
 
-  <% if @import_results %>
+  <% if @dataset.has_result? %>
     <ul id="import-summary" class="list-group">
       <li id="total-rows" class="list-group-item">
         <span class="badge">
-          <%= @import_results.total_rows_count %>
+          <%= @dataset.total_rows %>
         </span>
         <span class='text-muted'>Total rows</span>
       </li>
 
       <li id="successful-rows" class="list-group-item">
         <span class="badge badge-success">
-          <%= @import_results.imported_rows_count %>
+          <%= @dataset.imported_rows %>
         </span>
         <span class='text-success'>Imported rows</span>
       </li>
 
       <li id="failed-rows" class="list-group-item">
         <span class="badge badge-error">
-          <%= @import_results.rows_with_errors.size %>
+          <%= @dataset.failed_rows %>
         </span>
         <span class='text-danger'>Failed rows</span>
       </li>
     </ul>
 
-    <% if @import_results.rows_with_errors.any? %>
-      <%= render 'error_report', results: @import_results, model: @dataset.model %>
+    <% if @dataset.file.has_errors? %>
+      <%= render 'error_report', results: @dataset.file, model: @dataset.model %>
     <% end %>
   <% end %>
 
